@@ -30,20 +30,19 @@ COOKIES:
   value: ''
 DEFAULT_HEADERS:
   accept: application/json
-  accept-language: zh-CN,zh;q=0.9
-  cache-control: no-cache
+  accept-language: zh,zh-CN;q=0.9,en;q=0.8
+  content-type: application/x-www-form-urlencoded
   origin: https://www.goofish.com
-  pragma: no-cache
   priority: u=1, i
   referer: https://www.goofish.com/
-  sec-ch-ua: '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"'
+  sec-ch-ua: '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"'
   sec-ch-ua-mobile: ?0
   sec-ch-ua-platform: '"Windows"'
   sec-fetch-dest: empty
   sec-fetch-mode: cors
   sec-fetch-site: same-site
   user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
-    like Gecko) Chrome/133.0.0.0 Safari/537.36
+    like Gecko) Chrome/140.0.7132.86 Safari/537.36
 HEARTBEAT_INTERVAL: 15
 HEARTBEAT_TIMEOUT: 30
 LOG_CONFIG:
@@ -61,13 +60,14 @@ MESSAGE_EXPIRE_TIME: 300000
 TOKEN_REFRESH_INTERVAL: 72000  # 从3600秒(1小时)增加到72000秒(20小时)
 TOKEN_RETRY_INTERVAL: 7200    # 从300秒(5分钟)增加到7200秒(2小时)
 WEBSOCKET_HEADERS:
-  Accept-Encoding: gzip, deflate, br, zstd
-  Accept-Language: zh-CN,zh;q=0.9
+  Accept-Encoding: gzip, deflate, br
+  Accept-Language: zh,zh-CN;q=0.9,en;q=0.8
   Cache-Control: no-cache
   Connection: Upgrade
   Host: wss-goofish.dingtalk.com
   Origin: https://www.goofish.com
   Pragma: no-cache
+  Sec-WebSocket-Version: '13'
   User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
-    like Gecko) Chrome/133.0.0.0 Safari/537.36
+    like Gecko) Chrome/140.0.7132.86 Safari/537.36
 WEBSOCKET_URL: wss://wss-goofish.dingtalk.com/
