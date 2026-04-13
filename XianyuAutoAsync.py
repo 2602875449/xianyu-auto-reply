@@ -12,6 +12,7 @@ from utils.xianyu_utils import (
     decrypt, generate_mid, generate_uuid, trans_cookies,
     generate_device_id, generate_sign
 )
+from utils.device_profile import get_device_profile
 from config import (
     WEBSOCKET_URL, HEARTBEAT_INTERVAL, HEARTBEAT_TIMEOUT,
     TOKEN_REFRESH_INTERVAL, TOKEN_RETRY_INTERVAL, COOKIES_STR,
@@ -642,6 +643,12 @@ class XianyuLive:
         self.cookies_str = cookies_str  # 保存原始cookie字符串
         self.user_id = user_id  # 保存用户ID，用于token刷新时保持正确的所有者关系
         self.base_url = WEBSOCKET_URL
+
+        # 为当前账号选择一个真实设备指纹，用于后续HTTP/WebSocket请求
+        self.device_profile = get_device_profile(self.cookie_id)
+        logger.info(
+            f"【{self.cookie_id}】使用模拟设备指纹: {self.device_profile.describe()}"
+        )
 
         if 'unb' not in self.cookies:
             raise ValueError(f"【{cookie_id}】Cookie中缺少必需的'unb'字段，当前字段: {list(self.cookies.keys())}")
@@ -6824,8 +6831,10 @@ class XianyuLive:
         """创建aiohttp session"""
         if not self.session:
             # 创建带有cookies和headers的session
-            headers = DEFAULT_HEADERS.copy()
-            headers['cookie'] = self.cookies_str
+            headers = self.device_profile.build_http_headers(
+                DEFAULT_HEADERS,
+                cookie=self.cookies_str,
+            )
 
             self.session = aiohttp.ClientSession(
                 headers=headers,
@@ -7752,8 +7761,10 @@ class XianyuLive:
                         logger.info(f"【{self.cookie_id}】账号已禁用，停止主循环")
                         break
 
-                    headers = WEBSOCKET_HEADERS.copy()
-                    headers['Cookie'] = self.cookies_str
+                    headers = self.device_profile.build_websocket_headers(
+                        WEBSOCKET_HEADERS,
+                        cookie=self.cookies_str,
+                    )
 
                     # 更新连接状态为连接中
                     self._set_connection_state(ConnectionState.CONNECTING, "准备建立WebSocket连接")
